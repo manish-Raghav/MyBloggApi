@@ -1,0 +1,17 @@
+1 - CURD -OPeration  - Post,get,update ,delete ,Filter
+
+Blogger-->
+PostBloggerData --> images ,Auther ,Title, Contant ,tages,view,likes,category4-->Done
+imageUpload -->Done
+get all data -->Done
+update post->
+Delete Post ->Done
+
+
+User-->
+Signup --> name email password;
+ login --> email ,password;
+ jwt Authentication-->
+
+ mongodb integration -->
+ 
