@@ -1,17 +1,32 @@
 1 - CURD -OPeration  - Post,get,update ,delete ,Filter
+ Blogg
+ 
+ .env File 
+ corc
 
+
+
+
+
+----------------->  Features  ---->
 Blogger-->
 PostBloggerData --> images ,Auther ,Title, Contant ,tages,view,likes,category4-->Done
-imageUpload -->Done
-get all data -->Done
-update post->
-Delete Post ->Done
+imageUpload ---->Done
+get all data ---->Done
+update post----->
+Delete Post ---->Done
+Search Blog with category and title--->
+Filter Blog With category --->
 
 
 User-->
-Signup --> name email password;
- login --> email ,password;
- jwt Authentication-->
+ Signup --> name email password;-->  Done
+ login --> email ,password;--> Done
+ jwt Authentication-->Done
+ bycrupt---> Done
+ mongoose integration -->Done
 
- mongodb integration -->
+ Comment To Blogg  mutiple user can comment-->Done
+  Like to Blog  multiple user can like -->
+  Rating to Blogg with 5  multiple user can give rating to Blogg----->
  
