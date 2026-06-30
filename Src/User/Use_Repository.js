@@ -1,26 +1,26 @@
-import { getDB } from "../Config/confi.js";
-import Usermodule from "./User_Module.js";
 
+import { User } from "./User.schema.js";
+// import Usermodule from "./User_Module.js";
+import bcrypt from 'bcrypt'
 export default class UserRepository {
   static async Signnup(dt) {
-    console.log("from repository to dt", dt);
+     try {
+     
 
-    try {
-      const db = getDB();
-      const collection = db.collection("User");
-
-      const user = await collection.findOne({ email: dt.email });
+      const user = await User.findOne({ email: dt.email });
       if (user) {
-        return {
-          success: false,
-          message: "User already exists",
-        };
+        throw new Error("User already exists");
+       
       }
-      const result = await collection.insertOne(dt);
+     
+     const hashpass = await bcrypt.hash(dt.password,8);
+
+       dt.password = hashpass;
+      const newuser = new User(dt);
+      const result = await newuser.save();
       return {
-        success: true,
-        message: "Signup successful",
-        user: result.insertedId,
+        
+        user: result,
       };
     } catch (err) {
       console.log(err);
@@ -33,40 +33,33 @@ export default class UserRepository {
   }
 
   static async Signin(email, password) {
-    console.log(" Sign in repository to dt", email, password);
+    // console.log(" Sign in repository to dt", email, password);
 
     try {
-      const db = getDB();
-      const collection = db.collection("User");
-
-      const user = await collection.find({ email: email });
+    
+      const user = await User.findOne({ email });
+        console.log(" Sign in repository userdata", user);
 
       if (!user) {
-        return {
-          success: false,
-          message: "User not found",
-        };
+        //  throw new Error("User not found");
+        return;
       }
+     const isMatch = await bcrypt.compare(password, user.password);
+         
+    if (!isMatch) {
+        // throw new Error("Invalid Password");
+        return 
+    }
+      
 
-      if (user.password != password) {
-        return {
-          success: false,
-          message: "Invalid password",
-        };
-      }
-
-      return {
-        success: true,
-        message: "Login successful",
-        user,
-      };
+      return user
     } catch (err) {
       console.log(err);
-
-      return {
-        success: false,
-        message: "Something went wrong",
-      };
+        return
+      // return {
+      //   success: false,
+      //   message: "Something went wrong",
+      // };
     }
   }
 }

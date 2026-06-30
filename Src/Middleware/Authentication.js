@@ -12,7 +12,9 @@ const jwttoken = (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, "manish1234raghav");
-    console.log("Payload:", payload);
+    console.log("Payload is here -->:", payload);
+    req.id = payload.id;
+    
     next();
   } catch (err) {
     console.log("JWT Error:", err.message);

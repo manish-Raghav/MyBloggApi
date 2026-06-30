@@ -1,28 +1,61 @@
-import { getDB } from "../Config/confi.js";
+
+import { Blog } from "./Blog.Modle.js";
 
 export class BlogRepository {
   static async addblog(mydt) {
-    const db = getDB();
-    const collection = db.collection("UserBlog");
+    console.log('blogRepositury in console and', mydt);
+    
+    try{
 
-    const us = collection.insertOne(mydt);
-    return us;
-  }
+      const newBlog = new Blog(mydt);
+         const result = await newBlog.save();
+       return  result
 
+    } catch(err){
+         console.log('error in Blogrepo',err);
+         throw err;
+        
+    };    
+    }
   static async getallblog() {
-    const db = getDB();
-    const collection = db.collection("UserBlog");
-
-    const alldata = await collection.find({}).toArray();
-
+     try{
+      const alldata = await Blog.find() ; 
     return alldata;
+  
+    } catch(err){
+           return {
+         success: false,
+        message: " there is some error ",
+        
+    };  
   }
+}
 
-  // static updatedt() {}
+   static async updatedt(id) {
 
-  // static deletedt(id) {
-  //   const deldt = Blogdt.filter((val, ind) => val.id !== id);
-  //   Blogdt = deldt;
-  //   return Blogdt;
-  // }
+
+   }
+
+
+  static async deleteBlog(product_id, user_id) {
+  try {
+
+    const deletedBlog =
+      await Blog.findOneAndDelete({
+        _id: product_id,
+        user: user_id
+      });
+
+    if (!deletedBlog) {
+      throw new Error(
+        "Blog not found or unauthorized"
+      );
+    }
+
+    return deletedBlog;
+
+  } catch (err) {
+    throw err;
+  }
+}
 }

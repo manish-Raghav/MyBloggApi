@@ -1,32 +1,81 @@
-import { BlogModule } from "./BlogModule.js";
+
+
 import { BlogRepository } from "./BlogRepository.js";
 
 class Bloggcontroller {
-  async Pushdata(req, res) {
-    console.log("this is controller", req.body);
+  async Pushdata(req,res){
+      // console.log("Blogger push data",req.id);
+      
+      try{
+        const {title,auther,content,category}=req.body;
+        const imgurl=req.file?.filename;
 
-    const { title, auther, contant, category } = req.body;
-    const imgurl = req.file?.filename || "";
-    // const id = Bloggdt.length + 1;
-    const newdata = new BlogModule(title, imgurl, auther, contant, category);
-    const resdt = await BlogRepository.addblog(newdata);
-    res.status(201).json({ status: "sucessesfull", msg: resdt });
-  }
+        const blogData={
+            title,
+            imgurl,
+            auther,
+            content,
+            category,
+             user: req.id
+        };
+
+        const result=await BlogRepository.addblog(blogData);
+
+        return res.status(201).json({
+            success:true,
+            data:result
+        });
+
+    }
+    catch(err){
+
+        return res.status(400).json({
+            success:false,
+            message:err.message
+        });
+
+    }
+
+}
 
   async getAlldata(req, res) {
     const alldt = await BlogRepository.getallblog();
-    console.log("all blog data is here you to just check", alldt);
+    // console.log("all blog data is here you to just check", alldt);
 
     res.status(200).json({ status: "sucessesfull", msg: alldt });
   }
 
-  // DeleteBlog(req, res) {
-  //   const id = req.query.id;
-  //   console.log("hey i am manish gatting id", id);
 
-  //   const respdt = BlogRepository.deletedt(id);
-  //   res.status(303).json({ status: "sucessesfull", msg: respdt });
-  // }
+
+  
+
+  async deleteBlog(req, res) {
+
+  try {
+      console.log('welcome to deleteBlog--->');
+      
+     const blogid =req.params.id;
+      const userid = req.id;
+     
+    
+    const result = await BlogRepository.deleteBlog(blogid,userid);
+     console.log('welcome to deleteBlog--->',result);
+    return res.status(200).json({
+      success: true,
+      message: "Blog deleted successfully",
+      data: result
+    });
+
+  } catch (err) {
+
+    return res.status(404).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+}
 }
 
 export default Bloggcontroller;
